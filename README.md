@@ -2,6 +2,12 @@
 
 klofr is a discord.py bot for the FQ-HLL autocorrection algorithm library
 
+## hyperloglog
+
+uses the extremely cool, [accurate, and low-memory-usage](https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect/tree/main/fq_hll_py#results) autocorrect algorithm library which you can read more about [here](https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect)!!! star the repository and `pip install fq-hll` or `pip install DyslexicLogLog` :D
+
+https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect
+
 ### features
 
 - compile a custom dictionary from a directory from command
