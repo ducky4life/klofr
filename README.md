@@ -35,7 +35,7 @@ make sure you have [python](https://www.python.org/downloads/) installed.
    ```
    touch .env
    ```
-5. put your secrets in the .env file (without the brackets: [ ])
+5. put your secrets in the .env file (without the brackets: `[ ]`)
    ```
    KLOFR_TOKEN="[your bot token]"
    ```
