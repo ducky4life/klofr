@@ -45,7 +45,10 @@ async def autocorrector(query:str, number:int=1, separator:str=" "):
     else:
         for key in ac_results:
             for i in range(3-number):
-                ac_results[key].pop(-1)
+                try:
+                    ac_results[key].pop(-1)
+                except:
+                    return(query)
         return ac_results
 
 async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
@@ -104,27 +107,42 @@ async def compile_dictionary_from_dir():
     ac = Autocorrector(dictionary_file)
     return("compiled!")
 
-async def add_to_dictionary(word):
+async def add_to_dictionary(words):
     await backup_custom_dictionary()
-    with open(custom_dictionary_file, "a", encoding="utf-8") as custom_dictionary:
-        custom_dictionary.write("\n")
-        custom_dictionary.write(word)
+    for word in words.split(" "):
+        with open(custom_dictionary_file, "a", encoding="utf-8") as custom_dictionary:
+            custom_dictionary.write("\n")
+            custom_dictionary.write(word)
     await compile_dictionary_from_dir()
-    return(f"{word} is added to dictionary!")
+    return(f"{words} is added to dictionary!")
 
-async def remove_from_dictionary(word):
+async def remove_from_dictionary(words):
     await backup_custom_dictionary()
-    with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
-        custom_dictionary_list = custom_dictionary.readlines()
-        custom_dictionary_list = [word.replace("\n", "") for word in custom_dictionary_list]
+    for word in words.split(" "):
+        with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
+            custom_dictionary_list = custom_dictionary.readlines()
+            custom_dictionary_list = [word.replace("\n", "") for word in custom_dictionary_list]
+            try:
+                custom_dictionary_list.remove(word)
+            except Exception as e:
+                return e
         try:
-            custom_dictionary_list.remove(word)
             with open(custom_dictionary_file, "w", encoding="utf-8") as custom_dictionary:
                 custom_dictionary.write("\n".join(custom_dictionary_list))
             await compile_dictionary_from_dir()
         except Exception as e:
             return e
-        return(f"{word} is removed from dictionary!")
+        return(f"{words} is removed from dictionary!")
+    
+async def get_word_index(word):
+    with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
+        custom_dictionary_list = custom_dictionary.readlines()
+        custom_dictionary_list = [word.replace("\n", "") for word in custom_dictionary_list]
+    try:
+        index = custom_dictionary_list.index(word)
+        return f"{word} is in line {index} or sth close idk"
+    except:
+        return f"cant find {word}"
 
 async def get_custom_dictionary():
     with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
@@ -167,6 +185,11 @@ async def get_dictionary(ctx):
     await ctx.send(f"""```
 {msg}
 ```""")
+    
+@client.hybrid_command()
+async def get_word_location(ctx, word):
+    msg = await get_word_index(word)
+    await ctx.send(msg)
 # endregion
 
 
@@ -182,7 +205,13 @@ async def on_message(message: discord.Message):
         msg_list = message.content.split(" ")
         for word in msg_list:
             ac_query = await autocorrector(word, 1, " ")
-            ac_word = ac_query[word][0] if len(word) != 1 else word
+            if len(word) != 1:
+                try:
+                    ac_word = ac_query[word][0]
+                except:
+                    ac_word = word
+            else:
+                ac_word = word
             msg.append(ac_word)
         if msg != "":
             await message.channel.send(" ".join(msg))
