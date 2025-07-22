@@ -15,6 +15,25 @@ https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect
 - autocorrect words from command (/autocorrect)
 - autocorrect words from channel
 
+### directory structure
+
+the default dictionary `20k_shun4midx.txt` packaged can be found [here](https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect/blob/main/fq_hll_py/src/fq_hll/test_files/20k_shun4midx.txt), feel free to delete it and add as many txt files as you want in the dictionary directory. custom directories and file names can be set at roughly line 20 of `klofr.py`.
+
+```
+.
+├── keep_alive.py
+├── klofr.py
+├── requirements.txt
+└── text_files
+    ├── backups
+    │   ├── (backup files)
+    ├── compiled_dictionary.txt
+    └── dictionary
+        ├── custom_words.txt
+        ├── 20k_shun4midx.txt
+        └── (other dictionary files)
+```
+
 ### usage
 
 make sure you have [python](https://www.python.org/downloads/) installed.
