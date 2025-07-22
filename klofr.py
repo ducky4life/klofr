@@ -100,7 +100,8 @@ async def compile_dictionary_from_dir():
             with open(filepath, "r", encoding="utf-8") as file:
                 compiled_dictionary.write(file.read())
                 compiled_dictionary.write("\n")
-    ac.save_dictionary()
+    global ac
+    ac = Autocorrector(dictionary_file)
     return("compiled!")
 
 async def add_to_dictionary(word):
@@ -108,8 +109,8 @@ async def add_to_dictionary(word):
     with open(custom_dictionary_file, "a", encoding="utf-8") as custom_dictionary:
         custom_dictionary.write("\n")
         custom_dictionary.write(word)
-        await compile_dictionary_from_dir()
-        return(f"{word} is added to dictionary!")
+    await compile_dictionary_from_dir()
+    return(f"{word} is added to dictionary!")
 
 async def remove_from_dictionary(word):
     await backup_custom_dictionary()
@@ -170,7 +171,7 @@ async def get_dictionary(ctx):
 
 
 bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334]
-channel_id_list = [1396923821268799649] # 1131933056530382878
+channel_id_list = [1131933056530382878] #1396923821268799649
 
 @client.event
 async def on_message(message: discord.Message):
