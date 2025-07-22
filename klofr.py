@@ -24,13 +24,14 @@ dictionary_file = "text_files/compiled_dictionary.txt"
 custom_dictionary_file = dictionary_dir + "/custom_words.txt"
 backup_directory = "text_files/backups"
 
-ac = Autocorrector()
+ac = Autocorrector(dictionary_file)
 
 @client.event
 async def on_ready():
     print('Roboduck is ready')
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="ITS KLOFR THE SHEEP!"))
     await client.tree.sync()
+    await compile_dictionary_from_dir()
 
 async def autocorrector(query:str, number:int=1, separator:str=" "):
     input_list = query.split(separator)
@@ -99,6 +100,7 @@ async def compile_dictionary_from_dir():
             with open(filepath, "r", encoding="utf-8") as file:
                 compiled_dictionary.write(file.read())
                 compiled_dictionary.write("\n")
+    ac.save_dictionary()
     return("compiled!")
 
 async def add_to_dictionary(word):
@@ -167,8 +169,8 @@ async def get_dictionary(ctx):
 # endregion
 
 
-bot_id_list = [1186326404267266059, 839794863591260182, 944245571714170930, 1396935480284680334]
-channel_id_list = [1396923821268799649]
+bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334]
+channel_id_list = [1396923821268799649] # 1131933056530382878
 
 @client.event
 async def on_message(message: discord.Message):
@@ -181,7 +183,8 @@ async def on_message(message: discord.Message):
             ac_query = await autocorrector(word, 1, " ")
             ac_word = ac_query[word][0] if len(word) != 1 else word
             msg.append(ac_word)
-        await message.channel.send(" ".join(msg))
+        if msg != "":
+            await message.channel.send(" ".join(msg))
 
 keep_alive.keep_alive()
 client.run(token)
