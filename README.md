@@ -58,7 +58,7 @@ make sure you have [python](https://www.python.org/downloads/) installed.
    ```
    KLOFR_TOKEN="[your bot token]"
    ```
-6. create directory structure as shown in https://github.com/ducky4life/klofr?tab=readme-ov-file#directory-structure
+6. create directory structure as shown [here](https://github.com/ducky4life/klofr?tab=readme-ov-file#directory-structure)
 7. run klofr.py
    ```
    python klofr.py
