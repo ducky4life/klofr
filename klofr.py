@@ -194,7 +194,7 @@ async def get_word_location(ctx, word):
 
 
 bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334]
-channel_id_list = [1131933056530382878] #1396923821268799649
+channel_id_list = [1131933056530382878, 1396923821268799649]
 
 @client.event
 async def on_message(message: discord.Message):
