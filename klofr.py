@@ -213,7 +213,7 @@ async def on_message(message: discord.Message):
             else:
                 ac_word = word
             msg.append(ac_word)
-        if msg != "":
+        if msg != []:
             await message.channel.send(" ".join(msg))
 
 keep_alive.keep_alive()
