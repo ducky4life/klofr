@@ -25,9 +25,9 @@ the default dictionary `20k_shun4midx.txt` packaged can be found [here](https://
 ├── klofr.py
 ├── requirements.txt
 └── text_files
+    ├── compiled_dictionary.txt
     ├── backups
     │   ├── (backup files)
-    ├── compiled_dictionary.txt
     └── dictionary
         ├── custom_words.txt
         ├── 20k_shun4midx.txt
