@@ -1,6 +1,6 @@
 # klofr
 
-klofr is a discord.py bot for the FQ-HLL autocorrection algorithm library
+klofr is a discord.py bot for the FQ-HLL autocorrection algorithm library (pronounced "clover")
 
 ## hyperloglog
 
