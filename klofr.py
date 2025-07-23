@@ -23,6 +23,7 @@ dictionary_dir = "text_files/dictionary"
 dictionary_file = "text_files/compiled_dictionary.txt"
 custom_dictionary_file = dictionary_dir + "/custom_words.txt"
 backup_directory = "text_files/backups"
+autorespond_channel_file = "text_files/autorespond_channels.txt"
 
 ac = Autocorrector(dictionary_file)
 
@@ -156,6 +157,33 @@ async def get_custom_dictionary():
         custom_dictionary_content = custom_dictionary.read()
         print(custom_dictionary_content)
         return(custom_dictionary_content)
+    
+async def get_autorespond_channel_id():
+    with open(autorespond_channel_file, "r", encoding="utf-8") as autorespond_channels:
+        autorespond_channels = autorespond_channels.readlines()
+        autorespond_channels_list = [id.replace("\n", "") for id in autorespond_channels]
+        return(autorespond_channels_list)
+    
+async def add_to_autorespond_channels(channel_id:str):
+    with open(autorespond_channel_file, "a", encoding="utf-8") as autorespond_channels:
+        autorespond_channels.write("\n")
+        autorespond_channels.write(channel_id)
+    return(f"channel id `{channel_id}` is added to autorespond channels!")
+
+async def remove_from_autorespond_channels(channel_id:str):
+    with open(autorespond_channel_file, "r", encoding="utf-8") as autorespond_channels:
+        autorespond_channels_list = autorespond_channels.readlines()
+        autorespond_channels_list = [id.replace("\n", "") for id in autorespond_channels_list]
+        try:
+            autorespond_channels_list.remove(channel_id)
+        except Exception as e:
+            return e
+    try:
+        with open(autorespond_channel_file, "w", encoding="utf-8") as autorespond_channels:
+            autorespond_channels.write("\n".join(autorespond_channels_list))
+    except Exception as e:
+        return e
+    return(f"channel id `{channel_id}` is removed from dictionary!")
 # endregion
 
 # region autocorrect commands
@@ -223,16 +251,37 @@ async def get_dictionary(ctx):
 async def get_word_location(ctx, word):
     msg = await get_word_index(word)
     await ctx.send(msg)
+
+@client.hybrid_command()
+async def get_autorespond_channels(ctx):
+    msg = await get_autorespond_channel_id()
+    msg = "\n".join(msg)
+    await ctx.send(f"""```
+{msg}
+```""")
+    
+@client.hybrid_command()
+async def add_autorespond_channel(ctx, channel: discord.TextChannel):
+    channel_id = str(channel.id)
+    msg = await add_to_autorespond_channels(channel_id)
+    await ctx.send(msg)
+
+@client.hybrid_command()
+async def remove_autorespond_channel(ctx, channel: discord.TextChannel):
+    channel_id = str(channel.id)
+    msg = await remove_from_autorespond_channels(channel_id)
+    await ctx.send(msg)
 # endregion
 
 
 bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334]
-channel_id_list = [1131933056530382878, 1396923821268799649]
 
 @client.event
 async def on_message(message: discord.Message):
     await client.process_commands(message)
-    if message.channel.id in channel_id_list and message.author.id not in bot_id_list:
+    channel_id_list = await get_autorespond_channel_id()
+
+    if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list:
         msg = []
 
         if not message.content.startswith("!"): # dont autocorrect when using commands lol

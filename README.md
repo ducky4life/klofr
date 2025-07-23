@@ -11,10 +11,11 @@ https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect
 ### features
 
 - compile a custom dictionary from a directory from command
-- add/remove/compile/backup dictionary from command
+- add/remove/compile/backup/get dictionary from command
 - autocorrect words from command (/autocorrect)
 - autocorrect files from command (/autocorrect_file)
 - autocorrect words from every message in a channel using autoresponder
+- add/remove/get autorespond channels from command
 
 ### directory structure
 
@@ -27,6 +28,7 @@ the default dictionary `20k_shun4midx.txt` packaged can be found [here](https://
 ├── requirements.txt
 └── text_files
     ├── compiled_dictionary.txt
+    ├── autorespond_channels.txt
     ├── backups
     │   ├── (backup files)
     └── dictionary
@@ -67,4 +69,4 @@ make sure you have [python](https://www.python.org/downloads/) installed.
 
 ### todo
 
-- [ ] togglable channels to autorespond
+- [x] togglable channels to autorespond
