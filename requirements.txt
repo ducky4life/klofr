@@ -1,6 +1,5 @@
 flask
 discord
-pynacl
 python-dotenv
 waitress
 DyslexicLogLog
