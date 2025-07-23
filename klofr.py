@@ -33,7 +33,7 @@ async def on_ready():
     await client.tree.sync()
     await compile_dictionary_from_dir()
 
-async def autocorrector(query:str, number:int=1, separator:str=" "):
+async def autocorrector(query:str, number:int=1, separator:str="\n"):
     input_list = query.split(separator)
     if number not in [1,2,3]:
         return "please choose a number between 1 to 3 inclusive"
@@ -52,7 +52,13 @@ async def autocorrector(query:str, number:int=1, separator:str=" "):
         return ac_results
 
 async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
-    ac_results = await autocorrector(query, number, separator)
+
+    if separator != "\\n":
+        ac_results = await autocorrector(query, number, separator)
+
+    else: # i have no idea why passing "\n" through separator doesn't work but using the default value of "\n" does
+        ac_results = await autocorrector(query, number)
+
     msg = ""
     for key in ac_results:
         output = []
@@ -155,8 +161,12 @@ async def get_custom_dictionary():
 # region autocorrect commands
 @client.hybrid_command(aliases=['ac'])
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
-async def autocorrect(ctx, query:str="None", *, number:str="1", separator:str=" "):
-    msg = await prettify_autocorrector(query, int(number), separator)
+async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" "):
+    try:
+        msg = await prettify_autocorrector(query, int(number), separator)
+    except ValueError: # if you use text command and dont wrap your input with quotes
+        input = f"{query} {number} {separator}" if separator != " " else f"{query} {number}"
+        msg = f'if using text command please wrap your input with quotes :D i.e. `"{input}"`'
     await ctx.send(msg)
 
 @client.hybrid_command()
