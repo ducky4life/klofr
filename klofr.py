@@ -170,6 +170,24 @@ async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" 
     await ctx.send(msg)
 
 @client.hybrid_command()
+@app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
+async def autocorrect_file(ctx, file: discord.Attachment, number:str="1", *, separator:str=" "):
+    await ctx.defer()
+
+    uploaded_file = f"text_files/{file.filename}"
+    await file.save(uploaded_file)
+
+    try:
+        with open(uploaded_file, "r", encoding="utf-8") as input_file:
+            query = input_file.read()
+            msg = await prettify_autocorrector(query, int(number), separator)
+        os.remove(uploaded_file)
+    except Exception as e:
+        msg = e
+
+    await ctx.send(msg)
+
+@client.hybrid_command()
 async def compile_dictionary(ctx):
     msg = await compile_dictionary_from_dir()
     await ctx.send(msg)
