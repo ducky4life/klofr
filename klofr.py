@@ -155,7 +155,7 @@ async def get_custom_dictionary():
 # region autocorrect commands
 @client.hybrid_command(aliases=['ac'])
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
-async def autocorrect(ctx, query:str="None", *, number:str="1", separator:str" "):
+async def autocorrect(ctx, query:str="None", *, number:str="1", separator:str=" "):
     msg = await prettify_autocorrector(query, int(number), separator)
     await ctx.send(msg)
 
