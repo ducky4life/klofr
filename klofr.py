@@ -202,21 +202,23 @@ async def on_message(message: discord.Message):
     if message.channel.id in channel_id_list and message.author.id not in bot_id_list:
         msg = []
 
-        msg_list = message.content.split(" ")
-        for word in msg_list:
-            ac_query = await autocorrector(word, 1, " ")
-            if len(word) != 1:
-                try:
-                    ac_word = ac_query[word][0]
-                except:
+        if not message.content.startswith("!"): # dont autocorrect when using commands lol
+
+            msg_list = message.content.split(" ")
+            for word in msg_list:
+                ac_query = await autocorrector(word, 1, " ")
+                if len(word) != 1:
+                    try:
+                        ac_word = ac_query[word][0]
+                    except:
+                        ac_word = word
+                else:
                     ac_word = word
-            else:
-                ac_word = word
-            msg.append(ac_word)
-        try:
-            await message.channel.send(" ".join(msg))
-        except:
-            pass
+                msg.append(ac_word)
+            try:
+                await message.channel.send(" ".join(msg))
+            except:
+                pass
         
 @client.event
 async def on_command_error(ctx, error):
