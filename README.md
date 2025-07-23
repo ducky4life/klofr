@@ -13,7 +13,8 @@ https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect
 - compile a custom dictionary from a directory from command
 - add/remove/compile/backup dictionary from command
 - autocorrect words from command (/autocorrect)
-- autocorrect words from channel
+- autocorrect files from command (/autocorrect_file)
+- autocorrect words from every message in a channel using autoresponder
 
 ### directory structure
 
