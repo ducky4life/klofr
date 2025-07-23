@@ -213,8 +213,18 @@ async def on_message(message: discord.Message):
             else:
                 ac_word = word
             msg.append(ac_word)
-        if msg != []:
+        try:
             await message.channel.send(" ".join(msg))
+        except:
+            pass
+        
+@client.event
+async def on_command_error(ctx, error):
+    channel_id = 1131914463277240361
+    channel = client.get_channel(channel_id)
+    await channel.send(error)
+    await channel.send(error.__traceback__)
+
 
 keep_alive.keep_alive()
 client.run(token)
