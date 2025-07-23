@@ -107,18 +107,18 @@ async def compile_dictionary_from_dir():
     ac = Autocorrector(dictionary_file)
     return("compiled!")
 
-async def add_to_dictionary(words):
+async def add_to_dictionary(words, separator):
     await backup_custom_dictionary()
-    for word in words.split(" "):
+    for word in words.split(separator):
         with open(custom_dictionary_file, "a", encoding="utf-8") as custom_dictionary:
             custom_dictionary.write("\n")
             custom_dictionary.write(word)
     await compile_dictionary_from_dir()
     return(f"{words} is added to dictionary!")
 
-async def remove_from_dictionary(words):
+async def remove_from_dictionary(words, separator):
     await backup_custom_dictionary()
-    for word in words.split(" "):
+    for word in words.split(separator):
         with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
             custom_dictionary_list = custom_dictionary.readlines()
             custom_dictionary_list = [word.replace("\n", "") for word in custom_dictionary_list]
@@ -154,9 +154,9 @@ async def get_custom_dictionary():
 
 # region autocorrect commands
 @client.hybrid_command(aliases=['ac'])
-@app_commands.describe(number="an integer from 1-3 inclusive, displays top n results")
-async def autocorrect(ctx, query:str="None", *, number:str="1"):
-    msg = await prettify_autocorrector(query, int(number))
+@app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
+async def autocorrect(ctx, query:str="None", *, number:str="1", separator:str" "):
+    msg = await prettify_autocorrector(query, int(number), separator)
     await ctx.send(msg)
 
 @client.hybrid_command()
@@ -170,13 +170,15 @@ async def backup_dictionary(ctx):
     await ctx.send(msg)
 
 @client.hybrid_command()
-async def add_word(ctx, word):
-    msg = await add_to_dictionary(word)
+@app_commands.describe(separator="what separates your different words, defaults to spaces")
+async def add_word(ctx, word, separator=" "):
+    msg = await add_to_dictionary(word, separator)
     await ctx.send(msg)
 
 @client.hybrid_command()
-async def remove_word(ctx, word):
-    msg = await remove_from_dictionary(word)
+@app_commands.describe(separator="what separates your different words, defaults to spaces")
+async def remove_word(ctx, word, separator=" "):
+    msg = await remove_from_dictionary(word, separator)
     await ctx.send(msg)
 
 @client.hybrid_command()
