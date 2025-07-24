@@ -53,7 +53,7 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
         return ac_results
 
 async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
-
+    input_list = query.split(separator)
     if separator != "\\n":
         ac_results = await autocorrector(query, number, separator)
 
@@ -61,7 +61,7 @@ async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
         ac_results = await autocorrector(query, number)
 
     msg = ""
-    for key in ac_results:
+    for key in input_list:
         output = []
         word_list = ac_results[key.lower()]
 
