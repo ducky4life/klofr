@@ -87,7 +87,7 @@ async def send_codeblock(ctx, msg, *, view=None):
     else:
         await ctx.send(f"```{msg}```", view=view)
 
-@client.hybrid_command()
+@client.command()
 async def baa(ctx, *, message=None):
     await ctx.message.delete()
     await ctx.send(message)
