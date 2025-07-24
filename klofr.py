@@ -183,7 +183,7 @@ async def remove_from_autorespond_channels(channel_id:str):
             autorespond_channels.write("\n".join(autorespond_channels_list))
     except Exception as e:
         return e
-    return(f"channel id `{channel_id}` is removed from dictionary!")
+    return(f"channel id `{channel_id}` is removed from autorespond channels!")
 # endregion
 
 # region autocorrect commands
