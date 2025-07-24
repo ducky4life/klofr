@@ -302,7 +302,6 @@ async def on_message(message: discord.Message):
             #     msg.append(ac_word)
 
             ac_query = await autocorrector(content, 1, " ")
-            print(ac_query)
             for word in msg_list:
                 ac_word = ac_query[word][0]
                 msg.append(ac_word)
