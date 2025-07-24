@@ -187,7 +187,7 @@ async def remove_from_autorespond_channels(channel_id:str):
 # endregion
 
 # region autocorrect commands
-@client.hybrid_command(aliases=['ac'])
+@client.hybrid_command(aliases=['ac'], description="autocorrects a list of words from input")
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
 async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" "):
     try:
@@ -197,7 +197,7 @@ async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" 
         msg = f'if using text command please wrap your input with quotes :D i.e. `"{input}"`'
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="autocorrects every word in a txt file")
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
 async def autocorrect_file(ctx, file: discord.Attachment, number:str="1", *, separator:str=" "):
     await ctx.defer()
@@ -218,41 +218,41 @@ async def autocorrect_file(ctx, file: discord.Attachment, number:str="1", *, sep
 
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="compiles every file inside the dictionary directory")
 async def compile_dictionary(ctx):
     msg = await compile_dictionary_from_dir()
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="backups the custom dictionary to the backups directory")
 async def backup_dictionary(ctx):
     msg = await backup_custom_dictionary()
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="adds a word to the custom dictionary")
 @app_commands.describe(separator="what separates your different words, defaults to spaces")
 async def add_word(ctx, word, separator=" "):
     msg = await add_to_dictionary(word, separator)
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="removes a word from the custom dictionary")
 @app_commands.describe(separator="what separates your different words, defaults to spaces")
 async def remove_word(ctx, word, separator=" "):
     msg = await remove_from_dictionary(word, separator)
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="prints out the custom dictionary")
 async def get_dictionary(ctx):
     msg = await get_custom_dictionary()
     await ctx.send(f"""```
 {msg}
 ```""")
     
-@client.hybrid_command()
+@client.hybrid_command(description="tries to find a word from the custom dictionary")
 async def get_word_location(ctx, word):
     msg = await get_word_index(word)
     await ctx.send(msg)
 
-@client.hybrid_command()
+@client.hybrid_command(description="prints out a list of channel ids currently with autoresponder on")
 async def get_autorespond_channels(ctx):
     msg = await get_autorespond_channel_id()
     msg = "\n".join(msg)
@@ -260,13 +260,13 @@ async def get_autorespond_channels(ctx):
 {msg}
 ```""")
     
-@client.hybrid_command()
+@client.hybrid_command(description="adds a channel to autoresponder")
 async def add_autorespond_channel(ctx, channel: discord.TextChannel):
     channel_id = str(channel.id)
     msg = await add_to_autorespond_channels(channel_id)
     await ctx.send(f"{channel.name} {msg}")
 
-@client.hybrid_command()
+@client.hybrid_command(description="removes a channel from autoresponder")
 async def remove_autorespond_channel(ctx, channel: discord.TextChannel):
     channel_id = str(channel.id)
     msg = await remove_from_autorespond_channels(channel_id)
