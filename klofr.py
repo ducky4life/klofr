@@ -168,7 +168,7 @@ async def add_to_autorespond_channels(channel_id:str):
     with open(autorespond_channel_file, "a", encoding="utf-8") as autorespond_channels:
         autorespond_channels.write("\n")
         autorespond_channels.write(channel_id)
-    return(f"channel id `{channel_id}` is added to autorespond channels!")
+    return(f"(`{channel_id}`) is added to autorespond channels!")
 
 async def remove_from_autorespond_channels(channel_id:str):
     with open(autorespond_channel_file, "r", encoding="utf-8") as autorespond_channels:
@@ -183,7 +183,7 @@ async def remove_from_autorespond_channels(channel_id:str):
             autorespond_channels.write("\n".join(autorespond_channels_list))
     except Exception as e:
         return e
-    return(f"channel id `{channel_id}` is removed from autorespond channels!")
+    return(f"(`{channel_id}`) is removed from autorespond channels!")
 # endregion
 
 # region autocorrect commands
@@ -264,13 +264,13 @@ async def get_autorespond_channels(ctx):
 async def add_autorespond_channel(ctx, channel: discord.TextChannel):
     channel_id = str(channel.id)
     msg = await add_to_autorespond_channels(channel_id)
-    await ctx.send(msg)
+    await ctx.send(f"{channel.name} {msg}")
 
 @client.hybrid_command()
 async def remove_autorespond_channel(ctx, channel: discord.TextChannel):
     channel_id = str(channel.id)
     msg = await remove_from_autorespond_channels(channel_id)
-    await ctx.send(msg)
+    await ctx.send(f"{channel.name} {msg}")
 # endregion
 
 
