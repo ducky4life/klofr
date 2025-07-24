@@ -284,12 +284,12 @@ async def on_message(message: discord.Message):
     if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list:
 
         content = message.content
+        msg_list = content.split(" ")
         
         if not content.startswith("!"): # dont autocorrect when using commands lol
 
             # for dyslexicloglog version < 1.2.1
 
-            # msg_list = content.split(" ")
             # for word in msg_list:
             #     ac_query = await autocorrector(word, 1, " ")
             #     if len(word) != 1:
@@ -302,8 +302,11 @@ async def on_message(message: discord.Message):
             #     msg.append(ac_word)
 
             ac_query = await autocorrector(content, 1, " ")
-            for word in ac_query:
-                msg.append(ac_query[word][0])
+            print(ac_query)
+            for word in msg_list:
+                ac_word = ac_query[word][0]
+                msg.append(ac_word)
+
             try:
                 await message.channel.send(" ".join(msg))
             except:
