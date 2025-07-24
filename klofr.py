@@ -188,6 +188,7 @@ async def remove_from_autorespond_channels(channel_id:str):
 
 # region autocorrect commands
 @client.hybrid_command(aliases=['ac'])
+@app_commands.user_install()
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
 async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" "):
     try:
