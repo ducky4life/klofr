@@ -34,6 +34,9 @@ async def on_ready():
     print('Roboduck is ready')
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="ITS KLOFR THE SHEEP!"))
     await client.tree.sync()
+    global return_invalid_words
+    if client.user.id == 1396935480284680334:
+       return_invalid_words = False
     await compile_dictionary_from_dir()
 
 async def autocorrector(query:str, number:int=1, separator:str="\n"):
