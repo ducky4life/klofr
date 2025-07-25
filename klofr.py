@@ -19,11 +19,13 @@ client = commands.Bot(
     intents=intents)
 
 token = os.getenv("KLOFR_TOKEN")
+return_invalid_words = True
 dictionary_dir = "text_files/dictionary"
 dictionary_file = "text_files/compiled_dictionary.txt"
 custom_dictionary_file = dictionary_dir + "/custom_words.txt"
 backup_directory = "text_files/backups"
 autorespond_channel_file = "text_files/autorespond_channels.txt"
+
 
 ac = Autocorrector(dictionary_file)
 
@@ -38,8 +40,9 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
     input_list = query.split(separator)
     if number not in [1,2,3]:
         return "please choose a number between 1 to 3 inclusive"
-    
-    ac_results = ac.top3(input_list)
+
+    global return_invalid_words
+    ac_results = ac.top3(input_list, return_invalid_words=return_invalid_words)
 
     if number == 3:
         return ac_results
@@ -91,6 +94,12 @@ async def send_codeblock(ctx, msg, *, view=None):
 async def baa(ctx, *, message=None):
     await ctx.message.delete()
     await ctx.send(message)
+
+@client.hybrid_command()
+async def toggle_invalid_words(ctx):
+    global return_invalid_words
+    return_invalid_words = not return_invalid_words
+    ctx.send(f"ok return invalid words is set to {return_invalid_words}")
 # endregion
 
 # region autocorrect functions
