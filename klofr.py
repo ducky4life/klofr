@@ -315,7 +315,12 @@ async def on_message(message: discord.Message):
 
             ac_query = await autocorrector(content, 1, " ")
             for word in msg_list:
-                ac_word = ac_query[word][0]
+                try:
+                    ac_word = ac_query[word][0]
+                    if ac_word == '':
+                        ac_word = word
+                except:
+                    ac_word = word
                 msg.append(ac_word)
 
             try:
