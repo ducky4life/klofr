@@ -102,7 +102,7 @@ async def baa(ctx, *, message=None):
 async def toggle_invalid_words(ctx):
     global return_invalid_words
     return_invalid_words = not return_invalid_words
-    ctx.send(f"ok return invalid words is set to {return_invalid_words}")
+    await ctx.send(f"ok return invalid words is set to {return_invalid_words}")
 # endregion
 
 # region autocorrect functions
