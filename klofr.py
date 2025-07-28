@@ -52,10 +52,7 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
     else:
         for key in ac_results:
             for i in range(3-number):
-                try:
-                    ac_results[key].pop(-1)
-                except:
-                    return(query)
+                ac_results[key].pop(-1)
         return ac_results
 
 async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
