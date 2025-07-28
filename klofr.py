@@ -126,18 +126,28 @@ async def compile_dictionary_from_dir():
     ac = Autocorrector(dictionary_file)
     return("compiled!")
 
+async def compile_dictionary_from_words(word_list, mode):
+    global ac
+    if mode == "add":
+        ac.add_dictionary(word_list)
+    elif mode == "remove":
+        ac.remove_dictionary(word_list)
+    return("compiled from words!")
+
 async def add_to_dictionary(words, separator):
     await backup_custom_dictionary()
-    for word in words.split(separator):
+    word_list = words.split(separator)
+    for word in word_list:
         with open(custom_dictionary_file, "a", encoding="utf-8") as custom_dictionary:
             custom_dictionary.write("\n")
             custom_dictionary.write(word)
-    await compile_dictionary_from_dir()
+    await compile_dictionary_from_words(word_list, "add")
     return(f"{words} is added to dictionary!")
 
 async def remove_from_dictionary(words, separator):
     await backup_custom_dictionary()
-    for word in words.split(separator):
+    word_list = words.split(separator)
+    for word in word_list:
         with open(custom_dictionary_file, "r", encoding="utf-8") as custom_dictionary:
             custom_dictionary_list = custom_dictionary.readlines()
             custom_dictionary_list = [word.replace("\n", "") for word in custom_dictionary_list]
