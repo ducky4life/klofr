@@ -45,7 +45,7 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
         return "please choose a number between 1 to 3 inclusive"
 
     global return_invalid_words
-    ac_results = ac.top3(input_list, return_invalid_words=return_invalid_words)
+    ac_results = ac.top3(input_list, return_invalid_words=return_invalid_words).suggestions
 
     if number == 3:
         return ac_results
