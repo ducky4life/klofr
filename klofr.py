@@ -57,6 +57,10 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
 
 async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
     input_list = query.split(separator)
+
+    if number not in [1,2,3]:
+        return "please choose a number between 1 to 3 inclusive"
+            
     if separator != "\\n":
         ac_results = await autocorrector(query, number, separator)
 
