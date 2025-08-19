@@ -297,7 +297,7 @@ async def remove_autorespond_channel(ctx, channel: discord.TextChannel):
 # endregion
 
 
-bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334]
+bot_id_list = [839794863591260182, 944245571714170930, 1396935480284680334, 1334201497470373948]
 
 @client.event
 async def on_message(message: discord.Message):
