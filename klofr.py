@@ -329,7 +329,7 @@ async def on_message(message: discord.Message):
                 first_letter_caps = True if word == word.capitalize() else False
         
                 try:
-                    ac_word = ac_query[word][0]
+                    ac_word = ac_query[word.lower()][0]
                     if ac_word == '':
                         ac_word = word
                 except:
