@@ -308,6 +308,7 @@ async def on_message(message: discord.Message):
 
         content = message.content
         all_shouty_caps = True if content == content.upper() else False
+        first_letter_caps = True if content == content.capitalize() else False
         msg_list = content.lower().split(" ")
         
         if not content.startswith("!"): # dont autocorrect when using commands lol
@@ -339,6 +340,8 @@ async def on_message(message: discord.Message):
                 msg_to_send = " ".join(msg)
                 if all_shouty_caps:
                     msg_to_send = msg_to_send.upper()
+                else if first_letter_upper:
+                    msg_to_send = msg_to_send.capitalize()
                 await message.channel.send(msg_to_send)
             except:
                 pass
