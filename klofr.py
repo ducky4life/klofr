@@ -307,10 +307,7 @@ async def on_message(message: discord.Message):
     if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list:
 
         content = message.content
-        all_shouty_caps = True if content == content.upper() else False
-        first_letter_caps = True if content == content.capitalize() else False
-        msg_list = content.lower().split(" ")
-        
+        msg_list = content.lower().split(" ")        
         if not content.startswith("!"): # dont autocorrect when using commands lol
 
             # for dyslexicloglog version < 1.2.1
@@ -328,21 +325,25 @@ async def on_message(message: discord.Message):
 
             ac_query = await autocorrector(content, 1, " ")
             for word in msg_list:
+                all_shouty_caps = True if word == word.upper() else False
+                first_letter_caps = True if word == word.capitalize() else False
+        
                 try:
                     ac_word = ac_query[word][0]
                     if ac_word == '':
                         ac_word = word
                 except:
                     ac_word = word
-                msg.append(ac_word)
+
+                if all_shouty_caps:
+                    msg.append(ac_word.upper())
+                elif first_letter_caps:
+                    msg.append(ac_word.capitalize())
+                else:
+                    msg.append(ac_word)
 
             try:
-                msg_to_send = " ".join(msg)
-                if all_shouty_caps:
-                    msg_to_send = msg_to_send.upper()
-                elif first_letter_upper:
-                    msg_to_send = msg_to_send.capitalize()
-                await message.channel.send(msg_to_send)
+                await message.channel.send(" ".join(msg))
             except:
                 pass
         
