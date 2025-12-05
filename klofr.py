@@ -340,7 +340,7 @@ async def on_message(message: discord.Message):
                 msg_to_send = " ".join(msg)
                 if all_shouty_caps:
                     msg_to_send = msg_to_send.upper()
-                else if first_letter_upper:
+                elif first_letter_upper:
                     msg_to_send = msg_to_send.capitalize()
                 await message.channel.send(msg_to_send)
             except:
