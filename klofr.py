@@ -323,7 +323,7 @@ async def on_message(message: discord.Message):
             #         ac_word = word
             #     msg.append(ac_word)
 
-            ac_query = await autocorrector(content, 1, " ")
+            ac_query = await autocorrector(content.lower(), 1, " ")
             for word in msg_list:
                 all_shouty_caps = True if word == word.upper() else False
                 first_letter_caps = True if word == word.capitalize() else False
