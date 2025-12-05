@@ -307,7 +307,7 @@ async def on_message(message: discord.Message):
     if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list:
 
         content = message.content
-        msg_list = content.lower().split(" ")        
+        msg_list = content.split(" ")        
         if not content.startswith("!"): # dont autocorrect when using commands lol
 
             # for dyslexicloglog version < 1.2.1
