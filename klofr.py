@@ -5,9 +5,9 @@ from discord.ext import commands
 import os
 import shutil
 import time
-import keep_alive
 from dotenv import load_dotenv
-from dyslexicloglog import Autocorrector
+from dyslexicloglog import Autocorrector as fqhllAutocorrector
+from dyslexicplusplus import Autocorrector as hllppAutocorrector
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -20,6 +20,7 @@ client = commands.Bot(
 
 token = os.getenv("KLOFR_TOKEN")
 return_invalid_words = True
+use_hllpp_library = True
 dictionary_dir = "text_files/dictionary"
 dictionary_file = "text_files/compiled_dictionary.txt"
 custom_dictionary_file = dictionary_dir + "/custom_words.txt"
@@ -27,7 +28,14 @@ backup_directory = "text_files/backups"
 autorespond_channel_file = "text_files/autorespond_channels.txt"
 
 
-ac = Autocorrector(dictionary_file)
+ac = hllppAutocorrector(dictionary_file)
+
+async def initializeAutocorrector(use_hllpp = True):
+    global ac
+    if use_hllpp:
+        ac = hllppAutocorrector(dictionary_file)
+    else:
+        ac = fqhllAutocorrector(dictionary_file)
 
 @client.event
 async def on_ready():
@@ -104,6 +112,19 @@ async def toggle_invalid_words(ctx):
     global return_invalid_words
     return_invalid_words = not return_invalid_words
     await ctx.send(f"ok return invalid words is set to {return_invalid_words}")
+
+@client.hybrid_command()
+async def toggle_library(ctx):
+    global use_hllpp_library
+    use_hllpp_library = not use_hllpp_library
+
+    library = "fqhll"
+    if use_hllpp_library:
+        library = "hllpp"
+
+    await initializeAutocorrector(use_hllpp_library)
+
+    await ctx.send(f"ok current library is set to {library}")
 # endregion
 
 # region autocorrect functions
@@ -123,8 +144,7 @@ async def compile_dictionary_from_dir():
             with open(filepath, "r", encoding="utf-8") as file:
                 compiled_dictionary.write(file.read())
                 compiled_dictionary.write("\n")
-    global ac
-    ac = Autocorrector(dictionary_file)
+    await initializeAutocorrector()
     return("compiled!")
 
 async def compile_dictionary_from_words(word_list, mode):
@@ -355,5 +375,4 @@ async def on_command_error(ctx, error):
     await channel.send(error.__traceback__)
 
 
-keep_alive.keep_alive()
 client.run(token)
