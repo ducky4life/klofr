@@ -27,8 +27,7 @@ custom_dictionary_file = dictionary_dir + "/custom_words.txt"
 backup_directory = "text_files/backups"
 autorespond_channel_file = "text_files/autorespond_channels.txt"
 
-
-ac = hllppAutocorrector(dictionary_file)
+ac: fqhllAutocorrector|hllppAutocorrector = None
 
 async def initializeAutocorrector(use_hllpp = True):
     global ac
@@ -304,7 +303,7 @@ async def get_autorespond_channels(ctx):
 ```""")
     
 @client.hybrid_command(description="adds a channel to autoresponder")
-async def add_autorespond_channel(ctx, channel: discord.TextChannel):
+async def add_autorespond_channel(ctx, channel: discord.TextChannel|discord.VoiceChannel):
     channel_id = str(channel.id)
     msg = await add_to_autorespond_channels(channel_id)
     await ctx.send(f"{channel.name} {msg}")
@@ -324,7 +323,7 @@ async def on_message(message: discord.Message):
     await client.process_commands(message)
     channel_id_list = await get_autorespond_channel_id()
     msg = []
-    if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list:
+    if str(message.channel.id) in channel_id_list and message.author.id not in bot_id_list and message.author.id != client.application_id:
 
         content = message.content
         msg_list = content.split(" ")        
