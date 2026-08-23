@@ -46,6 +46,14 @@ async def on_ready():
        return_invalid_words = False
     await compile_dictionary_from_dir()
 
+async def hllpp_topk_autocorrector(query: str, number: int = 2, separator: str = "\n"):
+    input_list = query.split(separator)
+    global return_invalid_words
+
+    if use_hllpp_library:
+        ac_results = ac.top_k(input_list, return_invalid_words=return_invalid_words).suggestions
+        return ac_results
+
 async def autocorrector(query:str, number:int=1, separator:str="\n"):
     input_list = query.split(separator)
     if number not in [1,2,3]:
@@ -62,17 +70,27 @@ async def autocorrector(query:str, number:int=1, separator:str="\n"):
                 ac_results[key].pop(-1)
         return ac_results
 
-async def prettify_autocorrector(query:str, number:int=1, separator:str=" "):
+async def prettify_autocorrector(query:str, number:int=1, separator:str=" ", top_k: bool = False):
     input_list = query.split(separator)
 
-    if number not in [1,2,3]:
+    if number not in [1,2,3] and not top_k:
         return "please choose a number between 1 to 3 inclusive"
-            
-    if separator != "\\n":
-        ac_results = await autocorrector(query, number, separator)
 
-    else: # i have no idea why passing "\n" through separator doesn't work but using the default value of "\n" does
-        ac_results = await autocorrector(query, number)
+    if not top_k:
+
+        if separator != "\\n":
+            ac_results = await autocorrector(query, number, separator)
+
+        else: # i have no idea why passing "\n" through separator doesn't work but using the default value of "\n" does
+            ac_results = await autocorrector(query, number)
+
+    else:
+
+        if separator != "\\n":
+            ac_results = await hllpp_topk_autocorrector(query, number, separator)
+
+        else:
+            ac_results = await hllpp_topk_autocorrector(query, number)
 
     msg = ""
     for key in input_list:
@@ -230,10 +248,14 @@ async def remove_from_autorespond_channels(channel_id:str):
 
 # region autocorrect commands
 @client.hybrid_command(aliases=['ac'], description="autocorrects a list of words from input")
-@app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
+@app_commands.describe(number="no. of results, fqhll: 1-3, hllpp: go wild", separator="what separates your different words, defaults to spaces")
 async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" "):
     try:
-        msg = await prettify_autocorrector(query, int(number), separator)
+        msg = ""
+        if number > 3 and not use_hllpp_library:
+            number == 3
+            msg = "more than 3 results is only available with hllpp, defaulting to 3 results\\n"
+        msg += await prettify_autocorrector(query, int(number), separator, use_hllpp_library)
     except ValueError: # if you use text command and dont wrap your input with quotes
         input = f"{query} {number} {separator}" if separator != " " else f"{query} {number}"
         msg = f'if using text command please wrap your input with quotes :D i.e. `"{input}"`'
