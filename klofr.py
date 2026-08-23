@@ -259,7 +259,16 @@ async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" 
     except ValueError: # if you use text command and dont wrap your input with quotes
         input = f"{query} {number} {separator}" if separator != " " else f"{query} {number}"
         msg = f'if using text command please wrap your input with quotes :D i.e. `"{input}"`'
-    await ctx.send(msg)
+
+    if len(msg) < 2000:
+        await ctx.send(msg)
+    else:
+        filename = "text_files/temp.txt"
+        with open(filename, "w") as temp_file:
+            temp_file.write(msg)
+            temp_file.close()
+        await ctx.send("ok", file=discord.File(filename))
+        os.remove(filename)
 
 @client.hybrid_command(description="autocorrects every word in a txt file")
 @app_commands.describe(number="an integer from 1-3 inclusive, displays top n results", separator="what separates your different words, defaults to spaces")
