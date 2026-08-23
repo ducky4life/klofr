@@ -51,7 +51,7 @@ async def hllpp_topk_autocorrector(query: str, number: int = 2, separator: str =
     global return_invalid_words
 
     if use_hllpp_library:
-        ac_results = ac.top_k(input_list, return_invalid_words=return_invalid_words).suggestions
+        ac_results = ac.top_k(input_list, number, return_invalid_words=return_invalid_words).suggestions
         return ac_results
 
 async def autocorrector(query:str, number:int=1, separator:str="\n"):
