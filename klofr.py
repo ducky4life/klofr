@@ -252,8 +252,8 @@ async def remove_from_autorespond_channels(channel_id:str):
 async def autocorrect(ctx, query:str="None", number:str="1", *, separator:str=" "):
     try:
         msg = ""
-        if number > 3 and not use_hllpp_library:
-            number == 3
+        if int(number) > 3 and not use_hllpp_library:
+            number == "3"
             msg = "more than 3 results is only available with hllpp, defaulting to 3 results\\n"
         msg += await prettify_autocorrector(query, int(number), separator, use_hllpp_library)
     except ValueError: # if you use text command and dont wrap your input with quotes
