@@ -155,12 +155,17 @@ async def backup_custom_dictionary():
 
 async def compile_dictionary_from_dir():
     dictionary_list = os.listdir(dictionary_dir)
+    unique_words = set()
     with open(dictionary_file, "w", encoding="utf-8") as compiled_dictionary:
         for txt_file in dictionary_list:
             filepath = f"{dictionary_dir}/{txt_file}"
             with open(filepath, "r", encoding="utf-8") as file:
-                compiled_dictionary.write(file.read())
-                compiled_dictionary.write("\n")
+                words = file.read().split('\n')
+                for word in words:
+                    if word not in unique_words:
+                        compiled_dictionary.write(word)
+                        compiled_dictionary.write('\n')
+                        unique_words.add(word)
     await initializeAutocorrector()
     return("compiled!")
 
