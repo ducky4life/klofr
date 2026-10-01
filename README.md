@@ -19,7 +19,7 @@ https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect
 
 ### directory structure
 
-the default dictionary `20k_shun4midx.txt` packaged can be found [here](https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect/blob/main/fq_hll_py/src/fq_hll/test_files/20k_shun4midx.txt), feel free to delete it and add as many txt files as you want in the dictionary directory. custom directories and file names can be set at roughly line 20 of `klofr.py`.
+the default dictionary `50k_database.txt` packaged is a combination of [20k_shun4midx](https://github.com/shun4midx/FQ-HyperLogLog-Autocorrect/blob/main/fq_hll_py/src/fq_hll/test_files/20k_shun4midx.txt) and [default linux word list](https://users.cs.duke.edu/~ola/ap/linuxwords) with duplicates removed, feel free to delete it and add as many txt files as you want in the dictionary directory. custom directories and file names can be set at roughly line 20 of `klofr.py`.
 
 ```
 .
@@ -33,7 +33,7 @@ the default dictionary `20k_shun4midx.txt` packaged can be found [here](https://
     │   ├── (backup files)
     └── dictionary
         ├── custom_words.txt
-        ├── 20k_shun4midx.txt
+        ├── 50k_database.txt
         └── (other dictionary files)
 ```
 
