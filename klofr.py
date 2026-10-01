@@ -162,10 +162,10 @@ async def compile_dictionary_from_dir():
             with open(filepath, "r", encoding="utf-8") as file:
                 words = file.read().split('\n')
                 for word in words:
-                    if word not in unique_words:
+                    if word.lower() not in unique_words:
                         compiled_dictionary.write(word)
                         compiled_dictionary.write('\n')
-                        unique_words.add(word)
+                        unique_words.add(word.lower())
     await initializeAutocorrector()
     return("compiled!")
 
