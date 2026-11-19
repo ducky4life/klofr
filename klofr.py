@@ -132,6 +132,7 @@ async def toggle_invalid_words(ctx):
 
 @client.hybrid_command()
 async def toggle_library(ctx):
+    await ctx.defer()
     global use_hllpp_library
     use_hllpp_library = not use_hllpp_library
 
